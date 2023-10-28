@@ -38,5 +38,7 @@ module.exports = {
   // add rules configurations here
   rules: {
     "import/no-default-export": "off",
+    "@typescript-eslint/no-unsafe-assignment": "off",
+    "import/no-named-as-default": "off",
   },
 };
