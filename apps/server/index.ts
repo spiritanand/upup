@@ -1,12 +1,23 @@
-import express, { Request, Response } from "express";
+import express, { Request } from "express";
+import http from "http";
+import { WebSocketServer } from "ws";
 
 const app = express();
-const port = process.env.PORT || 8080;
+const port = 8080;
 
-app.get("/", (_req: Request, res: Response) => {
-  res.send("Express + TypeScript Server");
+const server = http.createServer(app);
+
+const wss = new WebSocketServer({ server });
+
+wss.on("connection", async (ws, req: Request) => {
+  ws.on("message", (message: string) => {
+    console.log(`received: ${message}`);
+    ws.send(`Hello, you sent -> ${message}`);
+  });
 });
 
-app.listen(port, () => {
-  console.log(`[server]: Server is running at http://localhost:${port}`);
+app.get("/health", (req, res) => {
+  res.json({ msg: "I am healthy" });
 });
+
+server.listen(port);
