@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import type { message } from "types";
 
 const webSocket = new WebSocket("ws://localhost:8080");
 
@@ -40,9 +41,7 @@ function AMA(): JSX.Element {
 
     // handle message
     webSocket.onmessage = (event: MessageEvent<string>) => {
-      const data: { type: string; payload: { message: string } } = JSON.parse(
-        event.data,
-      );
+      const data: message = JSON.parse(event.data);
 
       if (data.type === "message") {
         setMessages((prevMessages: string[]) => [

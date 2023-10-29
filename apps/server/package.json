@@ -21,7 +21,8 @@
     "@types/ws": "^8.5.8",
     "concurrently": "^8.2.2",
     "nodemon": "^3.0.1",
+    "typescript": "^5.2.2",
     "tsconfig": "workspace:*",
-    "typescript": "^5.2.2"
+    "types": "workspace:*"
   }
 }
