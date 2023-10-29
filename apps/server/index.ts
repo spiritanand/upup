@@ -1,4 +1,4 @@
-import express, { Request } from "express";
+import express from "express";
 import http from "http";
 import { WebSocketServer } from "ws";
 
@@ -9,15 +9,46 @@ const server = http.createServer(app);
 
 const wss = new WebSocketServer({ server });
 
-wss.on("connection", async (ws, req: Request) => {
+const users: {
+  [key: string]: {
+    room: string;
+    ws: any;
+  };
+} = {};
+
+let counter = 0;
+
+wss.on("connection", async (ws, req) => {
+  const wsId = counter++;
   ws.on("message", (message: string) => {
-    console.log(`received: ${message}`);
-    ws.send(`Hello, you sent -> ${message}`);
+    const data = JSON.parse(message.toString());
+    if (data.type === "join") {
+      users[wsId] = {
+        room: data.payload.roomId,
+        ws,
+      };
+    }
+
+    if (data.type === "message") {
+      const roomId = users[wsId].room;
+      const message = data.payload.message;
+
+      Object.keys(users).forEach((wsId) => {
+        if (users[wsId].room === roomId) {
+          users[wsId].ws.send(
+            JSON.stringify({
+              type: "message",
+              payload: {
+                message,
+              },
+            }),
+          );
+        }
+      });
+    }
   });
 });
 
-app.get("/health", (req, res) => {
-  res.json({ msg: "I am healthy" });
+server.listen(port, () => {
+  console.log(`[server]: Server listening on port ${port}`);
 });
-
-server.listen(port);

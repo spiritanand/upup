@@ -13,13 +13,42 @@ function AMA(): JSX.Element {
       return;
     }
 
-    webSocket.send(messageRef.current.value);
+    webSocket.send(
+      JSON.stringify({
+        type: "message",
+        payload: {
+          message: messageRef.current.value,
+        },
+      }),
+    );
   }
 
   useEffect(() => {
-    webSocket.onmessage = (event) => {
-      if (typeof event.data === "string") {
-        setMessages((prev) => [...prev, event.data as string]);
+    // connect to room
+    webSocket.onopen = () => {
+      const roomId = 1;
+
+      webSocket.send(
+        JSON.stringify({
+          type: "join",
+          payload: {
+            roomId,
+          },
+        }),
+      );
+    };
+
+    // handle message
+    webSocket.onmessage = (event: MessageEvent<string>) => {
+      const data: { type: string; payload: { message: string } } = JSON.parse(
+        event.data,
+      );
+
+      if (data.type === "message") {
+        setMessages((prevMessages: string[]) => [
+          ...prevMessages,
+          data.payload.message,
+        ]);
       }
     };
   }, []);
