@@ -19,11 +19,20 @@ const users: {
 let counter = 0;
 
 wss.on("connection", async (ws, req) => {
+  ws.on("", () => {
+    ws.send(JSON.stringify({ success: true, message: "created" }));
+  });
+
   const wsId = counter++;
   console.log(`[server]: New connection ${wsId}`);
 
   ws.on("message", (message: string) => {
     const data = JSON.parse(message.toString());
+
+    if (data.type === "ping") {
+      ws.send(JSON.stringify({ success: true, type: "pong" }));
+    }
+
     if (data.type === "join") {
       users[wsId] = {
         room: data.payload.roomId,

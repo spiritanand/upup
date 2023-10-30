@@ -32,8 +32,10 @@ module.exports = {
     },
   },
   ignorePatterns: ["node_modules/", "dist/", ".eslintrc.js"],
-
   rules: {
-    // add specific rules configurations here
+    "import/no-default-export": "off",
+    "@typescript-eslint/no-unsafe-assignment": "off",
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "import/no-named-as-default": "off",
   },
 };

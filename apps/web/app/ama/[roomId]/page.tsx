@@ -2,12 +2,21 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { message } from "types";
+import { Button } from "ui";
 
-const webSocket = new WebSocket("ws://localhost:8080");
+// const webSocket = new WebSocket("ws://localhost:8080");
 
-function AMA(): JSX.Element {
+function AMA({ params }: { params: { roomId: string } }): JSX.Element {
+  const roomId = params.roomId;
+
+  const [webSocket, setWebSocket] = useState<WebSocket>(
+    () => new WebSocket("ws://localhost:8080"),
+  );
+
   const messageRef = useRef<HTMLInputElement>(null);
   const [messages, setMessages] = useState<string[]>([]);
+
+  const [isWebsocketOpen, setIsWebsocketOpen] = useState(true);
 
   function handleSendMessage() {
     if (!messageRef.current?.value) {
@@ -25,10 +34,8 @@ function AMA(): JSX.Element {
   }
 
   useEffect(() => {
-    // connect to room
+    // connect to room (on open)
     webSocket.onopen = () => {
-      const roomId = 1;
-
       webSocket.send(
         JSON.stringify({
           type: "join",
@@ -50,7 +57,26 @@ function AMA(): JSX.Element {
         ]);
       }
     };
-  }, []);
+
+    // pinging ws server to maintain connection
+    const pingInterval = setInterval(() => {
+      webSocket.send(
+        JSON.stringify({
+          type: "ping",
+          payload: {},
+        }),
+      );
+    }, 250 * 1000);
+
+    webSocket.onclose = () => {
+      setIsWebsocketOpen(false);
+    };
+
+    return () => {
+      clearInterval(pingInterval);
+      webSocket.close();
+    };
+  }, [webSocket, roomId]);
 
   // console.log({ messages });
 
@@ -65,17 +91,25 @@ function AMA(): JSX.Element {
           ref={messageRef}
           type="text"
         />
-        <button
-          className="rounded-full bg-cyan-500 p-3"
-          onClick={handleSendMessage}
-          type="button"
-        >
-          Post question
-        </button>
+        <Button onClick={handleSendMessage}>Post Question</Button>
       </div>
       {messages.map((message) => (
         <p key={message}>{message}</p>
       ))}
+      {!isWebsocketOpen ? (
+        <>
+          <p>Websocket connection closed</p>
+          <Button
+            onClick={() => {
+              setWebSocket(new WebSocket("ws://localhost:8080"));
+              setIsWebsocketOpen(true);
+            }}
+            variant="secondary"
+          >
+            Reconnect
+          </Button>
+        </>
+      ) : null}
     </main>
   );
 }
