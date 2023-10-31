@@ -14,7 +14,6 @@ const wss = new WebSocketServer({ server });
 const users: {
   [key: string]: {
     room: string;
-    ws: any;
   };
 } = {};
 
@@ -27,7 +26,6 @@ wss.on("connection", async (ws, req) => {
     if (data.type === "join") {
       users[wsId] = {
         room: data.payload.roomId,
-        ws,
       };
       RedisPubSubManager.getInstance().subscribe(
         wsId.toString(),
@@ -37,7 +35,10 @@ wss.on("connection", async (ws, req) => {
     }
 
     if (data.type === "message") {
-      const roomId = users[wsId].room;
+      const roomId = users[wsId]?.room;
+
+      if (!roomId) ws.close();
+
       const message = data.payload.message;
       RedisPubSubManager.getInstance().sendMessage(roomId, message);
     }
@@ -48,10 +49,7 @@ wss.on("connection", async (ws, req) => {
   });
 
   ws.on("close", () => {
-    RedisPubSubManager.getInstance().unsubscribe(
-      wsId.toString(),
-      users[wsId].room,
-    );
+    RedisPubSubManager.getInstance().unsubscribe(wsId, users[wsId]?.room);
   });
 });
 

@@ -68,6 +68,8 @@ export class RedisPubSubManager {
   }
 
   unsubscribe(userId: string, room: string) {
+    if (!userId || !room || !this.subscriptions.get(userId)) return;
+
     // Remove room from user's subscriptions
     this.subscriptions.set(
       userId,

@@ -1,5 +1,5 @@
-export type messagePayload = {
-  id: string;
+type messagePayload = {
+  id?: string;
   message: string;
 };
 
