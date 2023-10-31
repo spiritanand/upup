@@ -27,6 +27,7 @@ export function Button({
         bg-gradient-to-r ${bgColor}
         transition-all duration-300 ease-out
         hover:ring-2 hover:ring-offset-2
+        active:ring-4
         `,
       )}
       disabled={disabled}
