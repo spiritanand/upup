@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import type { message } from "types";
 import { Button } from "ui";
 
-// const webSocket = new WebSocket("ws://localhost:8080");
 
 function AMA({ params }: { params: { roomId: string } }): JSX.Element {
   const roomId = params.roomId;
@@ -14,8 +13,6 @@ function AMA({ params }: { params: { roomId: string } }): JSX.Element {
   );
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<string[]>([]);
-
-  const [isWebsocketOpen, setIsWebsocketOpen] = useState(true);
 
   function handleSendMessage() {
     if (!message) {
@@ -70,7 +67,7 @@ function AMA({ params }: { params: { roomId: string } }): JSX.Element {
     }, 250 * 1000);
 
     webSocket.onclose = () => {
-      setIsWebsocketOpen(false);
+      setWebSocket(new WebSocket("ws://localhost:8080"));
     };
 
     return () => {
@@ -102,24 +99,10 @@ function AMA({ params }: { params: { roomId: string } }): JSX.Element {
 
         <Button onClick={handleSendMessage}>Post Question</Button>
       </div>
+
       {messages.map((wsMessage) => (
         <p key={wsMessage}>{wsMessage}</p>
       ))}
-
-      {!isWebsocketOpen ? (
-        <>
-          <p>Websocket connection closed</p>
-          <Button
-            onClick={() => {
-              setWebSocket(new WebSocket("ws://localhost:8080"));
-              setIsWebsocketOpen(true);
-            }}
-            variant="secondary"
-          >
-            Reconnect
-          </Button>
-        </>
-      ) : null}
     </main>
   );
 }

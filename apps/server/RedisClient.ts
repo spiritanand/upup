@@ -1,32 +1,38 @@
-import type { RedisClientType } from "redis";
-import { createClient } from "redis";
+import { Redis } from "ioredis";
 
 export class RedisPubSubManager {
   private static instance: RedisPubSubManager;
-  private subscriber: RedisClientType;
-  public publisher: RedisClientType;
+  private subscriber: Redis;
+  public publisher: Redis;
   private subscriptions: Map<string, string[]>;
   private reverseSubscriptions: Map<
     string,
-    { [userId: string]: { userId: string; ws: any } }
+    { [userId: string]: { userId: string; ws: WebSocket } }
   >;
 
   private constructor() {
-    this.subscriber = createClient();
-    this.publisher = createClient();
-    this.publisher.connect();
-    this.subscriber.connect();
+    this.subscriber = new Redis();
+    this.publisher = new Redis();
+
     this.subscriptions = new Map<string, string[]>();
     this.reverseSubscriptions = new Map<
       string,
       { [userId: string]: { userId: string; ws: any } }
     >();
+
+    this.subscriber.on("message", (channel, message) => {
+      console.log(`Received ${message} from ${channel}`);
+
+      const subscribers = this.reverseSubscriptions.get(channel) || {};
+
+      //   forward message to all subscribers of the channel
+      Object.values(subscribers).forEach(({ ws }) => ws.send(message));
+    });
   }
 
   static getInstance() {
-    if (!this.instance) {
-      this.instance = new RedisPubSubManager();
-    }
+    if (!this.instance) this.instance = new RedisPubSubManager();
+
     return this.instance;
   }
 
@@ -41,16 +47,17 @@ export class RedisPubSubManager {
       [userId]: { userId: userId, ws },
     });
 
+    // If this is the 1st subscriber to this room, subscribe to it
     if (Object.keys(this.reverseSubscriptions.get(room) || {})?.length === 1) {
-      console.log(`subscribing message from ${room}`);
-      // This is the first subscriber to this room
-      this.subscriber.subscribe(room, (payload) => {
-        try {
-          // const parsedPayload = JSON.parse(payload);
-          const subscribers = this.reverseSubscriptions.get(room) || {};
-          Object.values(subscribers).forEach(({ ws }) => ws.send(payload));
-        } catch (e) {
-          console.error("erroneous payload found?");
+      console.log(`subscribing messages from ${room}`);
+
+      this.subscriber.subscribe(room, (err, count) => {
+        if (err) {
+          console.error("Failed to subscribe: %s", err.message);
+        } else {
+          console.log(
+            `Subscribed successfully! This client is currently subscribed to ${count} channels.`,
+          );
         }
       });
     }
@@ -73,6 +80,11 @@ export class RedisPubSubManager {
       this.subscriber.unsubscribe(room);
       this.reverseSubscriptions.delete(room);
     }
+
+    console.log({
+      subs: this.subscriptions,
+      revSubs: this.reverseSubscriptions,
+    });
   }
 
   async addChatMessage(room: string, message: string) {

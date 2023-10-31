@@ -23,6 +23,8 @@ wss.on("connection", async (ws, req) => {
   const wsId = counter++;
   ws.on("message", (message: string) => {
     const data = JSON.parse(message.toString());
+    console.log({ data });
+
     if (data.type === "join") {
       users[wsId] = {
         room: data.payload.roomId,
