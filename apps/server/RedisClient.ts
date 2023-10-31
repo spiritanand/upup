@@ -1,4 +1,6 @@
 import { Redis } from "ioredis";
+import { message as TMessage } from "types";
+import { v4 as uuidv4 } from "uuid";
 
 export class RedisPubSubManager {
   private static instance: RedisPubSubManager;
@@ -37,17 +39,19 @@ export class RedisPubSubManager {
   }
 
   subscribe(userId: string, room: string, ws: any) {
+    // Add room to user's subscriptions
     this.subscriptions.set(userId, [
       ...(this.subscriptions.get(userId) || []),
       room,
     ]);
 
+    // Add user to room's subscribers
     this.reverseSubscriptions.set(room, {
       ...(this.reverseSubscriptions.get(room) || {}),
-      [userId]: { userId: userId, ws },
+      [userId]: { userId, ws },
     });
 
-    // If this is the 1st subscriber to this room, subscribe to it
+    // If this is the 1st subscriber to this room, subscribe to the room
     if (Object.keys(this.reverseSubscriptions.get(room) || {})?.length === 1) {
       console.log(`subscribing messages from ${room}`);
 
@@ -64,14 +68,20 @@ export class RedisPubSubManager {
   }
 
   unsubscribe(userId: string, room: string) {
+    // Remove room from user's subscriptions
     this.subscriptions.set(
       userId,
-      this.subscriptions.get(userId)?.filter((x) => x !== room) || [],
+      this.subscriptions.get(userId)?.filter((roomId) => roomId !== room) || [],
     );
-    if (this.subscriptions.get(userId)?.length === 0) {
+
+    // If user has no more subscriptions, remove user from subscriptions
+    if (this.subscriptions.get(userId)?.length === 0)
       this.subscriptions.delete(userId);
-    }
+
+    // Remove user from room's subscribers
     delete this.reverseSubscriptions.get(room)?.[userId];
+
+    // If room has no more subscribers, unsubscribe from it
     if (
       !this.reverseSubscriptions.get(room) ||
       Object.keys(this.reverseSubscriptions.get(room) || {}).length === 0
@@ -87,16 +97,17 @@ export class RedisPubSubManager {
     });
   }
 
-  async addChatMessage(room: string, message: string) {
+  async sendMessage(room: string, message: string) {
     this.publish(room, {
       type: "message",
       payload: {
+        id: uuidv4(),
         message,
       },
     });
   }
 
-  publish(room: string, message: any) {
+  publish(room: string, message: TMessage) {
     console.log(`publishing message to ${room}`);
     this.publisher.publish(room, JSON.stringify(message));
   }

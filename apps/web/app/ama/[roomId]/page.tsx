@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import type { message } from "types";
 import { Button } from "ui";
 
-
 function AMA({ params }: { params: { roomId: string } }): JSX.Element {
   const roomId = params.roomId;
 
@@ -12,7 +11,7 @@ function AMA({ params }: { params: { roomId: string } }): JSX.Element {
     () => new WebSocket("ws://localhost:8080"),
   );
   const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState<string[]>([]);
+  const [messages, setMessages] = useState<message["payload"][]>([]);
 
   function handleSendMessage() {
     if (!message) {
@@ -46,14 +45,13 @@ function AMA({ params }: { params: { roomId: string } }): JSX.Element {
 
     // handle message
     webSocket.onmessage = (event: MessageEvent<string>) => {
-      const data: message = JSON.parse(event.data);
+      const data = JSON.parse(event.data) as message;
 
-      if (data.type === "message") {
-        setMessages((prevMessages: string[]) => [
+      if (data.type === "message")
+        setMessages((prevMessages) => [
           ...prevMessages,
-          data.payload.message,
+          { id: data.payload.id, message: data.payload.message },
         ]);
-      }
     };
 
     // pinging ws server to maintain connection
@@ -101,7 +99,7 @@ function AMA({ params }: { params: { roomId: string } }): JSX.Element {
       </div>
 
       {messages.map((wsMessage) => (
-        <p key={wsMessage}>{wsMessage}</p>
+        <p key={wsMessage.id}>{wsMessage.message}</p>
       ))}
     </main>
   );

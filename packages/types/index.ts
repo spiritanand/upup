@@ -1,6 +1,9 @@
+export type messagePayload = {
+  id: string;
+  message: string;
+};
+
 export type message = {
   type: string;
-  payload: {
-    message: string;
-  };
+  payload: messagePayload;
 };

@@ -1,5 +1,6 @@
 import express from "express";
 import http from "http";
+import { v4 as uuidv4 } from "uuid";
 import { WebSocketServer } from "ws";
 import { RedisPubSubManager } from "./RedisClient";
 
@@ -17,10 +18,8 @@ const users: {
   };
 } = {};
 
-let counter = 0;
-
 wss.on("connection", async (ws, req) => {
-  const wsId = counter++;
+  const wsId = uuidv4();
   ws.on("message", (message: string) => {
     const data = JSON.parse(message.toString());
     console.log({ data });
@@ -40,7 +39,7 @@ wss.on("connection", async (ws, req) => {
     if (data.type === "message") {
       const roomId = users[wsId].room;
       const message = data.payload.message;
-      RedisPubSubManager.getInstance().addChatMessage(roomId, message);
+      RedisPubSubManager.getInstance().sendMessage(roomId, message);
     }
 
     if (data.type === "ping") {
