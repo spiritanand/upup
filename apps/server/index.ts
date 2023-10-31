@@ -1,5 +1,7 @@
 import express from "express";
 import http from "http";
+import { Redis } from "ioredis";
+import { nanoid } from "nanoid";
 import { WebSocketServer } from "ws";
 
 const app = express();
@@ -9,6 +11,8 @@ const server = http.createServer(app);
 
 const wss = new WebSocketServer({ server });
 
+const redis = new Redis();
+
 const users: {
   [key: string]: {
     room: string;
@@ -16,23 +20,18 @@ const users: {
   };
 } = {};
 
-let counter = 0;
-
 wss.on("connection", async (ws, req) => {
   ws.on("", () => {
     ws.send(JSON.stringify({ success: true, message: "created" }));
   });
 
-  const wsId = counter++;
+  const wsId = nanoid();
   console.log(`[server]: New connection ${wsId}`);
 
   ws.on("message", (message: string) => {
     const data = JSON.parse(message.toString());
 
-    if (data.type === "ping") {
-      ws.send(JSON.stringify({ success: true, type: "pong" }));
-    }
-
+    // handle new user join
     if (data.type === "join") {
       users[wsId] = {
         room: data.payload.roomId,
@@ -40,6 +39,7 @@ wss.on("connection", async (ws, req) => {
       };
     }
 
+    // handle messages
     if (data.type === "message") {
       const roomId = users[wsId].room;
       const message = data.payload.message;
@@ -56,6 +56,11 @@ wss.on("connection", async (ws, req) => {
           );
         }
       });
+    }
+
+    // ping pong to maintain active connection
+    if (data.type === "ping") {
+      ws.send(JSON.stringify({ success: true, type: "pong" }));
     }
   });
 });

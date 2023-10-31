@@ -15,11 +15,20 @@ export function Button({
   disabled?: boolean;
   children?: React.ReactNode;
 }) {
-  const bgColor = variant === "primary" ? "bg-cyan-500" : "bg-yellow-500";
+  const bgColor =
+    variant === "primary"
+      ? "from-cyan-500 to-teal-500 hover:from-teal-500 hover:to-cyan-500 hover:ring-cyan-500 text-gray-200"
+      : "from-yellow-500 to-amber-500 hover:from-amber-500 hover:to-yellow-500 hover:ring-yellow-500 text-gray-700";
 
   return (
     <button
-      className={cn(`rounded-full p-4 ${bgColor} ${className}`)}
+      className={cn(
+        `rounded-full p-4 font-semibold ${className}
+        bg-gradient-to-r ${bgColor}
+        transition-all duration-300 ease-out
+        hover:ring-2 hover:ring-offset-2
+        `,
+      )}
       disabled={disabled}
       onClick={onClick}
       type={type === "button" ? "button" : "submit"}

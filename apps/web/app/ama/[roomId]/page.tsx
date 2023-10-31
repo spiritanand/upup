@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import type { message } from "types";
 import { Button } from "ui";
 
@@ -12,14 +12,13 @@ function AMA({ params }: { params: { roomId: string } }): JSX.Element {
   const [webSocket, setWebSocket] = useState<WebSocket>(
     () => new WebSocket("ws://localhost:8080"),
   );
-
-  const messageRef = useRef<HTMLInputElement>(null);
+  const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<string[]>([]);
 
   const [isWebsocketOpen, setIsWebsocketOpen] = useState(true);
 
   function handleSendMessage() {
-    if (!messageRef.current?.value) {
+    if (!message) {
       return;
     }
 
@@ -27,10 +26,12 @@ function AMA({ params }: { params: { roomId: string } }): JSX.Element {
       JSON.stringify({
         type: "message",
         payload: {
-          message: messageRef.current.value,
+          message,
         },
       }),
     );
+
+    setMessage("");
   }
 
   useEffect(() => {
@@ -84,18 +85,27 @@ function AMA({ params }: { params: { roomId: string } }): JSX.Element {
     <main>
       <h1>AMA</h1>
       <p>Ask me Anything page</p>
-      <div className="flex w-full items-center justify-center space-x-2 p-2">
-        <input
-          className="max-w-sm rounded-lg border border-gray-300 p-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-cyan-500"
-          placeholder="Ask away..."
-          ref={messageRef}
-          type="text"
+
+      <div className="flex w-full items-center justify-center gap-2 space-x-2 p-2">
+        <textarea
+          className="rounded-lg border border-black p-3 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-cyan-500"
+          cols={35}
+          id=""
+          name=""
+          onChange={(e) => {
+            setMessage(e.target.value);
+          }}
+          placeholder="Ask Away..."
+          rows={3}
+          value={message}
         />
+
         <Button onClick={handleSendMessage}>Post Question</Button>
       </div>
-      {messages.map((message) => (
-        <p key={message}>{message}</p>
+      {messages.map((wsMessage) => (
+        <p key={wsMessage}>{wsMessage}</p>
       ))}
+
       {!isWebsocketOpen ? (
         <>
           <p>Websocket connection closed</p>
