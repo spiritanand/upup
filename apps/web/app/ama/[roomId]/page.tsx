@@ -82,7 +82,7 @@ function AMA({ params }: { params: { roomId: string } }) {
 
       <Messages messages={messages} />
 
-      <div className="border-top flex w-full flex-col items-center justify-center gap-2 space-x-2 p-2 md:bottom-10 md:flex-row">
+      <div className="border-top flex w-full flex-col items-center justify-center gap-4 space-x-2 p-2 md:bottom-10 md:flex-row md:gap-2">
         <textarea
           className="w-full flex-1 rounded-lg border border-black p-3 shadow-2xl focus:border-transparent focus:shadow-xl focus:outline-none focus:ring-2 focus:ring-cyan-500"
           name="send-message"

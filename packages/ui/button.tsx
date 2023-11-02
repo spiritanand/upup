@@ -23,13 +23,15 @@ export function Button({
   return (
     <button
       className={cn(
-        `rounded-full p-4 font-semibold ${className}
-        bg-gradient-to-r ${bgColor}
+        `rounded-full bg-gradient-to-r p-4
+        font-semibold
         transition-all duration-300 ease-out
         hover:ring-2 hover:ring-offset-2
         active:ring-4
         disabled:cursor-not-allowed disabled:opacity-50
         `,
+        className,
+        bgColor,
       )}
       disabled={disabled}
       onClick={onClick}
