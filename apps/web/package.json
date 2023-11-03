@@ -8,9 +8,11 @@
     "start": "next start",
     "lint": "next lint",
     "generate": "drizzle-kit generate:pg",
-    "push:pg": "drizzle-kit push:pg"
+    "push:pg": "drizzle-kit push:pg",
+    "studio": "drizzle-kit studio"
   },
   "dependencies": {
+    "@auth/core": "^0.18.0",
     "@auth/drizzle-adapter": "^0.3.5",
     "@neondatabase/serverless": "^0.6.0",
     "@radix-ui/colors": "^3.0.0",
@@ -18,6 +20,7 @@
     "drizzle-orm": "^0.28.6",
     "next": "^13.4.19",
     "next-auth": "^4.24.4",
+    "pg": "^8.11.3",
     "postgres": "^3.4.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

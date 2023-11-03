@@ -7,7 +7,7 @@ function Dashboard() {
         Room Card 1
         <div className="flex flex-col items-center justify-center gap-4">
           <button
-            className="inline-flex h-[75px] w-[75px] items-center justify-center rounded-2xl text-cyan-500 ring-2 ring-teal-500 transition hover:ring-offset-2 hover:ring-offset-cyan-500"
+            className="inline-flex h-[75px] w-[75px] items-center justify-center rounded-xl text-cyan-500 ring-2 ring-cyan-500 transition hover:ring-teal-500 hover:ring-offset-2 hover:ring-offset-cyan-500"
             type="button"
           >
             <PlusIcon height={75} width={75} />
