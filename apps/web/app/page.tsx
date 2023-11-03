@@ -1,14 +1,7 @@
 import Hero from "../components/home/hero";
-import Navbar from "../components/layout/navbar";
-// import Navbar from "../components/layout/navbar";
 
 function Landing(): JSX.Element {
-  return (
-    <>
-      <Navbar />
-      <Hero />
-    </>
-  );
+  return <Hero />;
 }
 
 export default Landing;

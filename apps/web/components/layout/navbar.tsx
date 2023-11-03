@@ -3,9 +3,11 @@
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Button } from "ui";
 
 function Navbar() {
+  const pathname = usePathname();
   const { status } = useSession();
 
   const isAuth = status === "authenticated";
@@ -22,11 +24,11 @@ function Navbar() {
           unoptimized
           width={0}
         />
-        <h2 className="bg-gradient-to-t from-cyan-500 to-teal-500 bg-clip-text text-2xl font-extrabold text-transparent md:text-4xl">
+        <h2 className="bg-gradient-to-t from-teal-500 to-cyan-500 bg-clip-text text-2xl font-extrabold text-transparent md:text-4xl">
           upup
         </h2>
       </Link>
-      <ul className="flex items-center gap-4">
+      <ul className="flex items-center justify-between gap-4">
         {!isAuth ? (
           <li className="">
             <Link href="api/auth/signin">
@@ -37,7 +39,18 @@ function Navbar() {
         {isAuth ? (
           <>
             <li>
-              <Link href="/dashboard">Dashboard</Link>
+              <Link
+                className={`md:text-lg
+                  ${
+                    pathname === "/dashboard"
+                      ? "font-bold text-cyan-500 underline"
+                      : ""
+                  }
+                `}
+                href="/dashboard"
+              >
+                Dashboard
+              </Link>
             </li>
             <li>
               <button

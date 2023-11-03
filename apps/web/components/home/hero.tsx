@@ -40,7 +40,7 @@ const hero = () => {
                     strokeWidth="2"
                   />
                 </svg>
-                Sign Up
+                <p className="md:text-lg">Sign Up</p>
               </span>
             </button>
           </Link>
