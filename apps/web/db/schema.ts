@@ -6,6 +6,7 @@ import {
   text,
   timestamp,
 } from "drizzle-orm/pg-core";
+import { v4 as uuidv4 } from "uuid";
 
 export const users = pgTable("user", {
   id: text("id").notNull().primaryKey(),
@@ -56,3 +57,12 @@ export const verificationTokens = pgTable(
     compoundKey: primaryKey(vt.identifier, vt.token),
   }),
 );
+
+export const rooms = pgTable("room", {
+  id: text("id").notNull().primaryKey().default(uuidv4()),
+  userId: text("userId")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  name: text("name").notNull(),
+  password: text("password").default(uuidv4()).notNull(),
+});

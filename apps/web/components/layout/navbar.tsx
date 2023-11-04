@@ -1,6 +1,6 @@
 "use client";
 
-import { signOut, useSession } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -31,9 +31,14 @@ function Navbar() {
       <ul className="flex items-center justify-between gap-4">
         {!isAuth ? (
           <li className="">
-            <Link href="api/auth/signin">
-              <Button className="rounded-lg p-2 font-bold">Sign In</Button>
-            </Link>
+            <Button
+              className="rounded-lg p-2 font-bold"
+              onClick={() => {
+                void signIn("", { callbackUrl: "/dashboard" });
+              }}
+            >
+              Sign In
+            </Button>
           </li>
         ) : null}
         {isAuth ? (
@@ -56,7 +61,7 @@ function Navbar() {
               <button
                 className="rounded-lg font-bold md:text-lg"
                 onClick={() => {
-                  void signOut();
+                  void signOut({ callbackUrl: "/" });
                 }}
                 type="button"
               >

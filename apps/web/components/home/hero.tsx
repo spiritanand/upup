@@ -13,7 +13,7 @@ const hero = () => {
             </span>
           </h1>
 
-          <p>
+          <p className="text-sm md:text-base">
             Just create a room, share the link with your audience and answer the
             top upvoted questions
           </p>

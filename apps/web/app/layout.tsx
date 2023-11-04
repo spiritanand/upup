@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { Inter } from "next/font/google";
 import Navbar from "../components/layout/navbar";
-import { authOptions } from "./api/auth/[...nextauth]/route";
 import "./globals.css";
 import Providers from "./providers";
 
@@ -22,7 +21,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getServerSession(authOptions);
+  const session = await getServerSession();
 
   return (
     <html className={inter.className} lang="en" suppressHydrationWarning>
