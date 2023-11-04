@@ -45,7 +45,7 @@ function Navbar() {
           <>
             <li>
               <Link
-                className={`md:text-lg
+                className={`transition-colors hover:text-cyan-500 md:text-lg
                   ${
                     pathname === "/dashboard"
                       ? "font-bold text-cyan-500 underline"
@@ -59,7 +59,7 @@ function Navbar() {
             </li>
             <li>
               <button
-                className="rounded-lg font-bold md:text-lg"
+                className="rounded-lg font-bold transition-colors hover:text-cyan-500 md:text-lg"
                 onClick={() => {
                   void signOut({ callbackUrl: "/" });
                 }}

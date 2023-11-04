@@ -2,6 +2,7 @@
 
 import { CopyIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
+import toast from "react-hot-toast";
 import { Button } from "ui";
 import type { SelectRooms } from "../../db/schema";
 
@@ -19,6 +20,15 @@ function RoomCard({ room }: { room: SelectRooms }) {
         </Link>
         <button
           className="text-cyan-500 transition-colors hover:text-cyan-700"
+          onClick={() => {
+            void navigator.clipboard.writeText(`
+            Meeting Details
+            Join @ https://upup.vercel.app/ama/${room.id}
+            Password:- ${room.password}
+            `);
+
+            toast.success("Copied to clipboard");
+          }}
           type="button"
         >
           <CopyIcon height={20} width={20} />
