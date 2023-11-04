@@ -1,21 +1,30 @@
-import { PlusIcon } from "@radix-ui/react-icons";
+import { eq } from "drizzle-orm";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
+import db from "../../db";
+import { rooms } from "../../db/schema";
+import { authOptions } from "../api/auth/[...nextauth]/route";
+import CreateRoom from "./CreateRoom";
 
-function Dashboard() {
+async function Dashboard() {
+  const session = await getServerSession(authOptions);
+
+  if (!session?.user) {
+    redirect("/auth/signin");
+  }
+
+  const usersRooms = await db
+    .select()
+    .from(rooms)
+    .where(eq(rooms.userId, session.user.id));
+
   return (
     <main className="mt-10">
       <div className="flex flex-col items-center justify-center gap-8 sm:flex-row sm:gap-24">
-        Room Card 1
-        <div className="flex flex-col items-center justify-center gap-4">
-          <button
-            className="inline-flex h-[75px] w-[75px] items-center justify-center rounded-xl text-cyan-500 ring-2 ring-cyan-500 transition hover:ring-teal-500 hover:ring-offset-2 hover:ring-offset-cyan-500"
-            type="button"
-          >
-            <PlusIcon height={75} width={75} />
-          </button>
-          <h1 className="text-sm text-gray-400 opacity-70">
-            Create a new room
-          </h1>
-        </div>
+        {usersRooms.map((room) => (
+          <p key={room.id}>{room.name}</p>
+        ))}
+        <CreateRoom />
       </div>
     </main>
   );

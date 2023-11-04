@@ -7,3 +7,7 @@ export type message = {
   type: string;
   payload: messagePayload;
 };
+
+export type TcreateRoom = {
+  name: string;
+};

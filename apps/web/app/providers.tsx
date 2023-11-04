@@ -13,7 +13,7 @@ const providers = ({
 }) => {
   return (
     <SessionProvider
-      // refetchInterval={10 * 60}
+      refetchInterval={10 * 60}
       // refetchOnWindowFocus
       session={session}
     >
