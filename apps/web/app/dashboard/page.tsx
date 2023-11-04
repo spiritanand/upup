@@ -5,6 +5,7 @@ import db from "../../db";
 import { rooms } from "../../db/schema";
 import { authOptions } from "../api/auth/[...nextauth]/route";
 import CreateRoom from "./CreateRoom";
+import RoomCard from "./RoomCard";
 
 async function Dashboard() {
   const session = await getServerSession(authOptions);
@@ -20,9 +21,9 @@ async function Dashboard() {
 
   return (
     <main className="mt-10">
-      <div className="flex flex-col items-center justify-center gap-8 sm:flex-row sm:gap-24">
+      <div className="sm:gap-18 flex flex-col items-center justify-center gap-8">
         {usersRooms.map((room) => (
-          <p key={room.id}>{room.name}</p>
+          <RoomCard key={room.id} room={room} />
         ))}
         <CreateRoom />
       </div>

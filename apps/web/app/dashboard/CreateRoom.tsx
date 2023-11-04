@@ -5,6 +5,7 @@ import axios from "axios";
 import { useState } from "react";
 import type { SubmitHandler } from "react-hook-form";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import type { TcreateRoom } from "types";
 import { Dialog } from "ui";
 import InputFields from "./InputFields";
@@ -25,8 +26,10 @@ function CreateRoom() {
 
       setOpenModal(false);
       resetField("name");
+
+      toast.success("Room created 🎉");
     } catch (error) {
-      console.log(error);
+      toast.error("Could not create room 🧐");
     }
   };
 

@@ -66,3 +66,4 @@ export const rooms = pgTable("room", {
   name: text("name").notNull(),
   password: text("password").default(uuid()).notNull(),
 });
+export type SelectRooms = typeof rooms.$inferSelect;

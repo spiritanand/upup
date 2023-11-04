@@ -30,6 +30,9 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ message: "Room Created", success: true });
   } catch (e) {
-    return NextResponse.json({ message: "Error", success: false });
+    return NextResponse.json(
+      { message: "Error", success: false },
+      { status: 500 },
+    );
   }
 }
