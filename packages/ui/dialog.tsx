@@ -37,19 +37,18 @@ function Dialog({
           <form
             onSubmit={(e) => {
               e.preventDefault();
+
               void onSubmit();
             }}
           >
             {inputFields}
             <div className="mt-[25px] flex justify-end">
-              {/* <RadixDialog.Close asChild> */}
               <button
                 className="inline-flex h-[35px] items-center justify-center rounded-[4px] bg-cyan-100 px-[15px] font-medium leading-none text-cyan-500 hover:bg-cyan-200 hover:text-cyan-600 focus:shadow-[0_0_0_2px] focus:shadow-cyan-600 focus:outline-none"
                 type="submit"
               >
                 {submitText}
               </button>
-              {/* </RadixDialog.Close> */}
             </div>
           </form>
           <RadixDialog.Close asChild>

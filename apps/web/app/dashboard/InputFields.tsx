@@ -9,11 +9,26 @@ function InputFields({
   errors: FieldErrors;
 }) {
   return (
-    <>
-      <label htmlFor="name">Name</label>
-      <input id="name" type="text" {...register("name", { required: true })} />
-      {errors.name ? <span>This field is required</span> : null}
-    </>
+    <div className="flex items-center gap-2">
+      <label className="font-bold" htmlFor="name">
+        Name
+      </label>
+
+      <div className="relative flex flex-col">
+        <input
+          id="name"
+          type="text"
+          {...register("name", { required: true })}
+          className="rounded-md border border-gray-300 p-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-cyan-500"
+          placeholder="Room Name"
+        />
+        {errors.name ? (
+          <span className="absolute -bottom-6 w-full text-xs text-red-600">
+            Name is required*
+          </span>
+        ) : null}
+      </div>
+    </div>
   );
 }
 
