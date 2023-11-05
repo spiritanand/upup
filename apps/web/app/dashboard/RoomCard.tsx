@@ -12,7 +12,7 @@ function RoomCard({ room }: { room: SelectRooms }) {
 
   return (
     <div className="m-4 flex flex-col gap-8 rounded-xl bg-cyan-100 p-8">
-      <div className="flex flex-col">
+      <div className="flex flex-col sm:text-lg">
         <p>
           Name:- <span className="font-bold">{room.name}</span>
         </p>
@@ -23,7 +23,7 @@ function RoomCard({ room }: { room: SelectRooms }) {
         <Link
           href={`/ama/${room.id}?p=${room.password}&n=${session.data?.user?.name}`}
         >
-          <Button>Join Room</Button>
+          <Button className="text-sm sm:text-base">Join Room</Button>
         </Link>
         <div className="flex gap-4">
           <button
@@ -39,7 +39,7 @@ function RoomCard({ room }: { room: SelectRooms }) {
             }}
             type="button"
           >
-            <CopyIcon height={20} width={20} />
+            <CopyIcon height={22} width={22} />
           </button>
         </div>
       </div>
