@@ -6,7 +6,7 @@ function InputFields({
   errors,
 }: {
   register: UseFormRegister<TcreateRoom>;
-  errors: FieldErrors;
+  errors: FieldErrors<TcreateRoom>;
 }) {
   return (
     <div className="flex items-center gap-4">
@@ -18,13 +18,30 @@ function InputFields({
         <input
           id="name"
           type="text"
-          {...register("name", { required: true, minLength: 3, maxLength: 20 })}
+          {...register("name", {
+            required: {
+              value: true,
+              message: "Name is required",
+            },
+            minLength: {
+              value: 3,
+              message: "Name must be at least 3 characters",
+            },
+            maxLength: {
+              value: 20,
+              message: "Name must be at most 20 characters",
+            },
+            pattern: {
+              value: /^(?!\s)/,
+              message: "Name cannot be empty or have leading spaces",
+            },
+          })}
           className="rounded-md border border-gray-300 p-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-cyan-500"
           placeholder="Room Name"
         />
         {errors.name ? (
           <span className="absolute -bottom-6 w-full text-xs text-red-600">
-            Name is required*
+            {errors.name.message}
           </span>
         ) : null}
       </div>

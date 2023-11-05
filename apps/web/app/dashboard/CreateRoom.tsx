@@ -21,8 +21,12 @@ function CreateRoom() {
   } = useForm<TcreateRoom>();
 
   const onSubmit: SubmitHandler<TcreateRoom> = async (data) => {
+    const name = data.name;
+
     try {
-      await axios.post("/api/createRoom", data);
+      await axios.post("/api/createRoom", {
+        name: name.trim(),
+      });
 
       setOpenModal(false);
       resetField("name");

@@ -24,6 +24,7 @@ function Navbar() {
           unoptimized
           width={0}
         />
+
         <h2 className="bg-gradient-to-t from-teal-500 to-cyan-500 bg-clip-text text-2xl font-extrabold text-transparent md:text-4xl">
           upup
         </h2>
@@ -57,6 +58,7 @@ function Navbar() {
                 Dashboard
               </Link>
             </li>
+
             <li>
               <button
                 className="rounded-lg font-bold transition-colors hover:text-cyan-500 md:text-lg"

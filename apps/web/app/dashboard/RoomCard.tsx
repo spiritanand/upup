@@ -8,7 +8,7 @@ import type { SelectRooms } from "../../db/schema";
 
 function RoomCard({ room }: { room: SelectRooms }) {
   return (
-    <div className="m-4 flex flex-col gap-8 rounded-lg bg-cyan-100 p-8">
+    <div className="m-4 flex flex-col gap-8 rounded-xl bg-cyan-100 p-8">
       <div className="flex flex-col">
         <p>Name:- {room.name}</p>
         <p>Password:- {room.password}</p>
@@ -19,7 +19,7 @@ function RoomCard({ room }: { room: SelectRooms }) {
           <Button>Join Room</Button>
         </Link>
         <button
-          className="text-cyan-500 transition-colors hover:text-cyan-700"
+          className="text-cyan-500 transition-colors hover:text-cyan-600"
           onClick={() => {
             void navigator.clipboard.writeText(`
             Meeting Details

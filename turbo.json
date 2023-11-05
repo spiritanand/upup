@@ -9,7 +9,8 @@
     "PGUSER",
     "PGPASSWORD",
     "PGDATABASE",
-    "DATABASE_URL"
+    "DATABASE_URL",
+    "NEXT_PUBLIC_WS_SERVER"
   ],
   "pipeline": {
     "build": {
