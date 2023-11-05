@@ -6,19 +6,28 @@ export class RedisPubSubManager {
   private static instance: RedisPubSubManager; // singleton instance
   private subscriber: Redis; // subscribe to channels
   private publisher: Redis; // publish to channels. This is a separate instance from subscriber
-  private subscriptions: Map<string, string[]>;
-  // userId -> [rooms], eg, { 1: ["room1", "room2"], 2: ["room1"] }
+  private subscriptions: Map<
+    string,
+    { [room: string]: { room: string; upvoted: string[] } }
+  >;
+  // userId -> { room -> { room, upvoted } }
+  // eg, { 1: { room1: { room: room1, upvoted: ["message1", "message2"] }, room2: { room: room2, upvoted: ["message12"] } } }
   private reverseSubscriptions: Map<
     string,
     { [userId: string]: { userId: string; ws: WebSocket } }
-    // room -> { room -> { userId, ws } } eg, { room1: { 1: { userId: 1, ws: ws1 }, 2: { userId: 2, ws: ws2 } } }
+    // room -> { room -> { userId, ws } }
+    // eg, { room1: { 1: { userId: 1, ws: ws1 }, 2: { userId: 2, ws: ws2 } } }
   >;
 
+  // instantiate this class using private constructor
   private constructor() {
     this.subscriber = new Redis();
     this.publisher = new Redis();
 
-    this.subscriptions = new Map<string, string[]>();
+    this.subscriptions = new Map<
+      string,
+      { [room: string]: { room: string; upvoted: string[] } }
+    >();
     this.reverseSubscriptions = new Map<
       string,
       { [userId: string]: { userId: string; ws: any } }
@@ -42,10 +51,10 @@ export class RedisPubSubManager {
 
   subscribe(userId: string, room: string, ws: any) {
     // Add room to user's subscriptions
-    this.subscriptions.set(userId, [
-      ...(this.subscriptions.get(userId) || []),
-      room,
-    ]);
+    this.subscriptions.set(userId, {
+      ...(this.subscriptions.get(userId) || {}),
+      [room]: { room, upvoted: [] },
+    });
 
     // Add user to room's subscribers
     this.reverseSubscriptions.set(room, {
@@ -73,14 +82,15 @@ export class RedisPubSubManager {
     if (!userId || !room || !this.subscriptions.get(userId)) return;
 
     // Remove room from user's subscriptions
-    this.subscriptions.set(
-      userId,
-      this.subscriptions.get(userId)?.filter((roomId) => roomId !== room) || [],
-    );
+    const userSubscriptions = this.subscriptions.get(userId);
+    if (userSubscriptions) {
+      delete userSubscriptions[room];
 
-    // If user has no more subscriptions, remove user from subscriptions
-    if (this.subscriptions.get(userId)?.length === 0)
-      this.subscriptions.delete(userId);
+      // If user has no more subscriptions, remove user from subscriptions
+      if (Object.keys(userSubscriptions).length === 0) {
+        this.subscriptions.delete(userId);
+      }
+    }
 
     // Remove user from room's subscribers
     delete this.reverseSubscriptions.get(room)?.[userId];
