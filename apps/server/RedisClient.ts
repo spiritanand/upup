@@ -19,7 +19,7 @@ export class RedisPubSubManager {
     // eg, { room1: { 1: { userId: 1, ws: ws1 }, 2: { userId: 2, ws: ws2 } } }
   >;
 
-  // instantiate this class using private constructor
+  // instantiate this class using private constructor.
   private constructor() {
     this.subscriber = new Redis();
     this.publisher = new Redis();
@@ -33,7 +33,7 @@ export class RedisPubSubManager {
       { [userId: string]: { userId: string; ws: any } }
     >();
 
-    //   forward message to all subscribers of the channel
+    // forward message to all subscribers of the channel
     this.subscriber.on("message", (channel, message) => {
       console.log(`Received ${message} from ${channel}`);
 
@@ -43,6 +43,7 @@ export class RedisPubSubManager {
     });
   }
 
+  // This is a singleton class, so we don't want to allow multiple instances
   static getInstance() {
     if (!this.instance) this.instance = new RedisPubSubManager();
 
@@ -122,7 +123,15 @@ export class RedisPubSubManager {
     });
   }
 
-  async upvoteMessage(room: string, userId: string, messageId: string) {}
+  async upvoteMessage(room: string, userId: string, messageId: string) {
+    // TODO: check if user has already upvoted this message
+    this.publish(room, {
+      type: "upvote",
+      payload: {
+        message: messageId,
+      },
+    });
+  }
 
   publish(room: string, message: TMessage) {
     console.log(`publishing message to ${room}`);

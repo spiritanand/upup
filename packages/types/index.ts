@@ -1,7 +1,7 @@
 type messagePayload = {
   id?: string;
   message: string;
-  upvotes: number;
+  upvotes?: number;
 };
 
 export type message = {

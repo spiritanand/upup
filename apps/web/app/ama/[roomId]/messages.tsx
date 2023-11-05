@@ -8,15 +8,16 @@ function Messages({
   messages: message["payload"][];
   webSocket: WebSocket;
 }) {
-  const handleUpvoteMessage = () => {
-    // const message = data.message;
-    // const packet: message = {
-    //   type: "message",
-    //   payload: {
-    //     message: message.trim(),
-    //   },
-    // };
-    // webSocket.send(JSON.stringify(packet));
+  const handleUpvoteMessage = (messageId: string) => {
+    if (!messageId) return;
+
+    const packet: message = {
+      type: "upvote",
+      payload: {
+        message: messageId,
+      },
+    };
+    webSocket.send(JSON.stringify(packet));
   };
 
   return (
@@ -33,7 +34,9 @@ function Messages({
           <div className="flex gap-6">
             <button
               className="flex gap-2"
-              onClick={handleUpvoteMessage}
+              onClick={() => {
+                handleUpvoteMessage(payload.id || "");
+              }}
               type="button"
             >
               <ThickArrowUpIcon

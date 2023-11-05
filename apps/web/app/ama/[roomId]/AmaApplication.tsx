@@ -38,6 +38,24 @@ function AmaApplication({ roomId }: { roomId: string }) {
             upvotes: data.payload.upvotes,
           },
         ]);
+
+      if (data.type === "upvote")
+        setMessages((prevMessages) => {
+          const messageIndex = prevMessages.findIndex(
+            (message) => message.id === data.payload.message,
+          );
+
+          if (messageIndex === -1) return prevMessages;
+
+          const newMessages = [...prevMessages];
+
+          if (newMessages[messageIndex].upvotes)
+            newMessages[messageIndex].upvotes =
+              (newMessages[messageIndex].upvotes || 0) + 1;
+          else newMessages[messageIndex].upvotes = 1;
+
+          return newMessages;
+        });
     };
 
     // recreating ws connection on close
