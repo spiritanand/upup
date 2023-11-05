@@ -32,39 +32,33 @@ function AmaApplication({ roomId }: { roomId: string }) {
       if (data.type === "message")
         setMessages((prevMessages) => [
           ...prevMessages,
-          { id: data.payload.id, message: data.payload.message },
+          {
+            id: data.payload.id,
+            message: data.payload.message,
+            upvotes: data.payload.upvotes,
+          },
         ]);
     };
 
-    // pinging ws server to maintain connection
-    const pingInterval = setInterval(() => {
-      webSocket.send(
-        JSON.stringify({
-          type: "ping",
-          payload: {},
-        }),
-      );
-    }, 250 * 1000);
-
+    // recreating ws connection on close
     webSocket.onclose = () => {
       setWebSocket(new WebSocket("ws://localhost:8080"));
     };
 
     return () => {
-      clearInterval(pingInterval);
       webSocket.close();
     };
   }, [webSocket, roomId]);
 
   return (
-    <main>
+    <>
       <h1>AMA</h1>
       <p>Ask me Anything page</p>
 
-      <Messages messages={messages} />
+      <Messages messages={messages} webSocket={webSocket} />
 
       <SendMessage webSocket={webSocket} />
-    </main>
+    </>
   );
 }
 
