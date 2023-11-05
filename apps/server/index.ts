@@ -19,14 +19,17 @@ const users: {
 
 wss.on("connection", async (ws, req) => {
   const wsId = uuidv4();
+
   ws.on("message", (message: string) => {
     const data = JSON.parse(message.toString());
     console.log({ data });
 
     if (data.type === "join") {
+      // assign a new unique id to any new user
       users[wsId] = {
         room: data.payload.roomId,
       };
+
       RedisPubSubManager.getInstance().subscribe(
         wsId.toString(),
         data.payload.roomId,
@@ -39,12 +42,9 @@ wss.on("connection", async (ws, req) => {
 
       if (!roomId) ws.close();
 
+      // publish message to redis channel
       const message = data.payload.message;
       RedisPubSubManager.getInstance().sendMessage(roomId, message);
-    }
-
-    if (data.type === "ping") {
-      ws.send(JSON.stringify({ type: "pong" }));
     }
   });
 

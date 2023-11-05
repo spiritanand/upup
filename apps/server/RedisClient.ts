@@ -3,13 +3,15 @@ import { message as TMessage } from "types";
 import { v4 as uuidv4 } from "uuid";
 
 export class RedisPubSubManager {
-  private static instance: RedisPubSubManager;
-  private subscriber: Redis;
-  public publisher: Redis;
+  private static instance: RedisPubSubManager; // singleton instance
+  private subscriber: Redis; // subscribe to channels
+  private publisher: Redis; // publish to channels. This is a separate instance from subscriber
   private subscriptions: Map<string, string[]>;
+  // userId -> [rooms], eg, { 1: ["room1", "room2"], 2: ["room1"] }
   private reverseSubscriptions: Map<
     string,
     { [userId: string]: { userId: string; ws: WebSocket } }
+    // room -> { room -> { userId, ws } } eg, { room1: { 1: { userId: 1, ws: ws1 }, 2: { userId: 2, ws: ws2 } } }
   >;
 
   private constructor() {
@@ -22,12 +24,12 @@ export class RedisPubSubManager {
       { [userId: string]: { userId: string; ws: any } }
     >();
 
+    //   forward message to all subscribers of the channel
     this.subscriber.on("message", (channel, message) => {
       console.log(`Received ${message} from ${channel}`);
 
       const subscribers = this.reverseSubscriptions.get(channel) || {};
 
-      //   forward message to all subscribers of the channel
       Object.values(subscribers).forEach(({ ws }) => ws.send(message));
     });
   }
@@ -105,9 +107,12 @@ export class RedisPubSubManager {
       payload: {
         id: uuidv4(),
         message,
+        upvotes: 0,
       },
     });
   }
+
+  async upvoteMessage(room: string, userId: string, messageId: string) {}
 
   publish(room: string, message: TMessage) {
     console.log(`publishing message to ${room}`);
