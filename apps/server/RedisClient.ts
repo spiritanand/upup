@@ -124,7 +124,13 @@ export class RedisPubSubManager {
   }
 
   async upvoteMessage(room: string, userId: string, messageId: string) {
-    // TODO: check if user has already upvoted this message
+    const userSubscriptions = this.subscriptions.get(userId);
+    if (!userSubscriptions) return;
+
+    if (userSubscriptions[room].upvoted.includes(messageId)) return;
+
+    userSubscriptions[room].upvoted.push(messageId);
+
     this.publish(room, {
       type: "upvote",
       payload: {
