@@ -10,7 +10,8 @@
     "PGPASSWORD",
     "PGDATABASE",
     "DATABASE_URL",
-    "NEXT_PUBLIC_WS_SERVER"
+    "NEXT_PUBLIC_WS_SERVER",
+    "CRYPT_KEY"
   ],
   "pipeline": {
     "build": {

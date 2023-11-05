@@ -40,7 +40,7 @@ function InputFields({
           placeholder="Room Name"
         />
         {errors.name ? (
-          <span className="absolute -bottom-6 w-full text-xs text-red-600">
+          <span className="absolute -bottom-10 w-full text-xs text-red-600">
             {errors.name.message}
           </span>
         ) : null}

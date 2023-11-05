@@ -2,6 +2,7 @@
 
 import { PlusIcon } from "@radix-ui/react-icons";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import type { SubmitHandler } from "react-hook-form";
 import { useForm } from "react-hook-form";
@@ -11,6 +12,7 @@ import { Dialog } from "ui";
 import InputFields from "./InputFields";
 
 function CreateRoom() {
+  const router = useRouter();
   const [openModal, setOpenModal] = useState(false);
 
   const {
@@ -32,6 +34,7 @@ function CreateRoom() {
       resetField("name");
 
       toast.success("Room created 🎉");
+      router.refresh();
     } catch (error) {
       toast.error("Could not create room 🧐");
     }

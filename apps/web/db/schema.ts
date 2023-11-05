@@ -59,11 +59,16 @@ export const verificationTokens = pgTable(
 );
 
 export const rooms = pgTable("room", {
-  id: text("id").notNull().primaryKey().default(uuid()),
+  id: text("id")
+    .notNull()
+    .primaryKey()
+    .$defaultFn(() => uuid()),
   userId: text("userId")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
   name: text("name").notNull(),
-  password: text("password").default(uuid()).notNull(),
+  password: text("password")
+    .$defaultFn(() => uuid())
+    .notNull(),
 });
 export type SelectRooms = typeof rooms.$inferSelect;
