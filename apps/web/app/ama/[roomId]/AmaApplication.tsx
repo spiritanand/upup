@@ -1,11 +1,25 @@
 "use client";
 
+import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import type { message } from "types";
+import { Avatar } from "ui";
+import type { SelectRooms } from "../../../db/schema";
 import SendMessage from "./SendMessage";
 import { Messages } from "./messages";
 
-function AmaApplication({ roomId }: { roomId: string }) {
+function AmaApplication({
+  roomId,
+  name,
+  room,
+}: {
+  roomId: string;
+  name: string;
+  room: SelectRooms;
+}) {
+  const session = useSession();
+  const host = session.data?.user?.name || session.data?.user?.email;
+
   const [webSocket, setWebSocket] = useState<WebSocket>(
     () =>
       new WebSocket(process.env.NEXT_PUBLIC_WS_SERVER || "ws://localhost:8080"),
@@ -54,6 +68,13 @@ function AmaApplication({ roomId }: { roomId: string }) {
               (newMessages[messageIndex].upvotes || 0) + 1;
           else newMessages[messageIndex].upvotes = 1;
 
+          // sort messages by upvotes. Highest upvotes first
+          newMessages.sort((a, b) => {
+            if (a.upvotes && b.upvotes) return b.upvotes - a.upvotes;
+
+            return 0;
+          });
+
           return newMessages;
         });
     };
@@ -70,8 +91,20 @@ function AmaApplication({ roomId }: { roomId: string }) {
 
   return (
     <>
-      <h1>AMA</h1>
-      <p>Ask me Anything page</p>
+      <div className="flex items-center justify-center gap-6">
+        <h1 className="text-3xl font-bold">{room.name}</h1>
+        {host ? (
+          <div className="flex items-center gap-2 text-xs">
+            <p>by</p>
+            <Avatar
+              alt={host}
+              fallback={host}
+              src={session.data?.user?.image || ""}
+            />
+            <p>{host}</p>
+          </div>
+        ) : null}
+      </div>
 
       <Messages messages={messages} webSocket={webSocket} />
 
