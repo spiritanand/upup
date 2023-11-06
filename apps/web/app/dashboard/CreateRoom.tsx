@@ -47,7 +47,7 @@ function CreateRoom() {
       inputFields={
         <InputField
           error={errors.name?.message}
-          name="name"
+          label="Name"
           placeholder="Room Name"
           register={{
             ...register("name", {

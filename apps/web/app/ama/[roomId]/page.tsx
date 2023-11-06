@@ -27,7 +27,7 @@ async function AMA({
     .catch(() => undefined);
 
   // if no room redirect to ama
-  if (!room) return redirect(`/ama/?e=${AmaError.ROOM}`);
+  if (!room) return redirect(`/ama/?e=${AmaError.ROOM}&n=${name}`);
 
   // if password is not correct redirect to ama with error and prefilled room id
   const isPasswordMatch = room.password === password;

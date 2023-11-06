@@ -26,7 +26,7 @@ async function Dashboard() {
         <Welcome />
         <CreateRoom />
       </div>
-      <div className="sm:gap-18 flex flex-col items-center justify-center gap-8">
+      <div className="sm:gap-18 flex flex-col items-center justify-center gap-8 lg:flex-row">
         {usersRooms.map((room) => (
           <RoomCard key={room.id} room={room} />
         ))}
