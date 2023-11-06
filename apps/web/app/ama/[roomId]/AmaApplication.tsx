@@ -10,11 +10,9 @@ import { Messages } from "./messages";
 
 function AmaApplication({
   roomId,
-  name,
   room,
 }: {
   roomId: string;
-  name: string;
   room: SelectRooms;
 }) {
   const session = useSession();

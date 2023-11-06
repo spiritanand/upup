@@ -9,7 +9,7 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import type { TcreateRoom } from "types";
 import { Dialog } from "ui";
-import InputFields from "./InputFields";
+import InputField from "../../components/ui/InputField";
 
 function CreateRoom() {
   const router = useRouter();
@@ -44,7 +44,33 @@ function CreateRoom() {
     <Dialog
       dialogDescription="Once created, you can share the meeting link to invite people to your room."
       dialogTitle="Create a new room"
-      inputFields={<InputFields errors={errors} register={register} />}
+      inputFields={
+        <InputField
+          error={errors.name?.message}
+          name="name"
+          placeholder="Room Name"
+          register={{
+            ...register("name", {
+              required: {
+                value: true,
+                message: "Name is required",
+              },
+              minLength: {
+                value: 3,
+                message: "Name must be at least 3 characters",
+              },
+              maxLength: {
+                value: 20,
+                message: "Name must be at most 20 characters",
+              },
+              pattern: {
+                value: /^(?!\s)/,
+                message: "Name cannot be empty or have leading spaces",
+              },
+            }),
+          }}
+        />
+      }
       onSubmit={handleSubmit(onSubmit)}
       openModal={openModal}
       setOpenModal={setOpenModal}

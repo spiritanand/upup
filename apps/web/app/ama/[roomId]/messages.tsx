@@ -21,7 +21,7 @@ function Messages({
   };
 
   return (
-    <ul className="m-4 h-[55vh] overflow-y-auto rounded-md border border-black p-2 shadow-lg md:h-[70vh] md:p-4">
+    <ul className="m-4 h-[55vh] overflow-y-auto rounded-md border border-gray-400 p-2 shadow-lg md:h-[70vh] md:p-4">
       {messages.map((payload) => (
         <div
           className=" flex flex-col gap-1 border-b-2 border-gray-300 p-3"

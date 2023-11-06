@@ -41,7 +41,7 @@ function SendMessage({ webSocket }: { webSocket: WebSocket }) {
     >
       <div className="flex w-full flex-1 flex-col gap-1">
         <textarea
-          className="rounded-lg border border-black p-3 shadow-2xl focus:border-transparent focus:shadow-xl focus:outline-none focus:ring-2 focus:ring-cyan-500"
+          className="rounded-md border border-gray-400 p-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-cyan-500"
           {...register("message", {
             required: { value: true, message: "Type a message" },
             pattern: {

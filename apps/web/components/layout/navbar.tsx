@@ -25,7 +25,7 @@ function Navbar() {
           width={0}
         />
 
-        <h2 className="bg-gradient-to-t from-teal-500 to-cyan-500 bg-clip-text text-2xl font-extrabold text-transparent md:text-4xl">
+        <h2 className="hidden bg-gradient-to-t from-teal-500 to-cyan-500 bg-clip-text text-2xl font-extrabold text-transparent sm:block md:text-4xl">
           upup
         </h2>
       </Link>
