@@ -18,7 +18,7 @@ export function Button({
   const bgColor =
     variant === "primary"
       ? "from-cyan-500 to-teal-500 hover:from-teal-500 hover:to-cyan-500 hover:ring-cyan-500 text-gray-200"
-      : "from-yellow-500 to-amber-500 hover:from-amber-500 hover:to-yellow-500 hover:ring-yellow-500 text-gray-700";
+      : "from-indigo-500 to-violet-500 hover:from-violet-500 hover:to-indigo-500 hover:ring-indigo-500 text-gray-200";
 
   return (
     <button

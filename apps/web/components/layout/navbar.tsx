@@ -30,6 +30,22 @@ function Navbar() {
         </h2>
       </Link>
       <ul className="flex items-center justify-between gap-4">
+        <li>
+          <Link
+            className="transition-colors hover:text-cyan-500 md:text-lg"
+            href="/ama"
+          >
+            <Button
+              className={`rounded-lg p-2 font-bold underline-offset-4 hover:underline ${
+                pathname === "/ama" ? "underline" : ""
+              }`}
+              variant="secondary"
+            >
+              Join Room
+            </Button>
+          </Link>
+        </li>
+
         {!isAuth ? (
           <li className="">
             <Button
@@ -42,11 +58,12 @@ function Navbar() {
             </Button>
           </li>
         ) : null}
+
         {isAuth ? (
           <>
             <li>
               <Link
-                className={`transition-colors hover:text-cyan-500 md:text-lg
+                className={`underline-offset-4 transition-colors hover:text-cyan-500 hover:underline md:text-lg
                   ${
                     pathname === "/dashboard"
                       ? "font-bold text-cyan-500 underline"
