@@ -2,7 +2,7 @@ import { eq } from "drizzle-orm";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import db from "../../../db";
-import { rooms } from "../../../db/schema";
+import { rooms, users } from "../../../db/schema";
 import { AmaError } from "../../../types";
 import { authOptions } from "../../api/auth/[...nextauth]/route";
 import AmaApplication from "./AmaApplication";
@@ -23,23 +23,25 @@ async function AMA({
     .select()
     .from(rooms)
     .where(eq(rooms.id, roomId))
+    .leftJoin(users, eq(users.id, rooms.userId))
     .then((r) => r[0])
     .catch(() => undefined);
 
   // if no room redirect to ama
-  if (!room?.id) return redirect(`/ama/?e=${AmaError.ROOM}&n=${name}`);
+  if (!room?.room || !room.user)
+    return redirect(`/ama/?e=${AmaError.ROOM}&n=${name}`);
 
   // if password is not correct redirect to ama with error and prefilled room id
-  const isPasswordMatch = room.password === password;
+  const isPasswordMatch = room.room.password === password;
   if (!isPasswordMatch)
     return redirect(`/ama/?r=${roomId}&n=${name}&e=${AmaError.PASSWORD}`);
 
   // check if user is host or not (to render admin panel)
-  const isAdmin = room.userId === session?.user?.id;
+  const isAdmin = room.room.userId === session?.user?.id;
 
   return (
     <main>
-      <AmaApplication room={room} roomId={roomId} />
+      <AmaApplication host={room.user} room={room.room} roomId={roomId} />
     </main>
   );
 }

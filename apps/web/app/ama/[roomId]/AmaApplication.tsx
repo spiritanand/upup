@@ -1,22 +1,22 @@
 "use client";
 
-import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import type { message } from "types";
 import { Avatar } from "ui";
-import type { SelectRooms } from "../../../db/schema";
+import type { SelectRooms, SelectUsers } from "../../../db/schema";
 import SendMessage from "./SendMessage";
 import { Messages } from "./messages";
 
 function AmaApplication({
   roomId,
   room,
+  host,
 }: {
   roomId: string;
   room: SelectRooms;
+  host: SelectUsers;
 }) {
-  const session = useSession();
-  const host = session.data?.user?.name || session.data?.user?.email;
+  const hostedBy = host.name || host.email;
 
   const [webSocket, setWebSocket] = useState<WebSocket>(
     () =>
@@ -91,15 +91,11 @@ function AmaApplication({
     <>
       <div className="flex items-center justify-center gap-6">
         <h1 className="text-3xl font-bold">{room.name}</h1>
-        {host ? (
+        {hostedBy ? (
           <div className="flex items-center gap-2 text-xs">
             <p>by</p>
-            <Avatar
-              alt={host}
-              fallback={host}
-              src={session.data?.user?.image || ""}
-            />
-            <p>{host}</p>
+            <Avatar alt={hostedBy} fallback={hostedBy} src={host.image || ""} />
+            <p>{hostedBy}</p>
           </div>
         ) : null}
       </div>
