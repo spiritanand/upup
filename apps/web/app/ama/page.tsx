@@ -68,7 +68,7 @@ function Ama({
 
   return (
     <main>
-      <h1 className="my-10 text-center text-3xl font-extrabold sm:text-4xl md:my-20">
+      <h1 className="mb-7 mt-10 text-center text-3xl font-extrabold sm:text-4xl md:mt-16">
         Enter Room details
       </h1>
 
@@ -80,6 +80,15 @@ function Ama({
           void handleSubmit(onSubmit)();
         }}
       >
+        {errors.root?.redirect?.message ? (
+          <span
+            className="self-center rounded-lg bg-red-200 p-4  text-red-600"
+            role="alert"
+          >
+            {errors.root.redirect.message}
+          </span>
+        ) : null}
+
         <InputField
           error={errors.name?.message}
           label="Name"
@@ -147,7 +156,7 @@ function Ama({
         </div>
 
         <Button
-          className="mt-2 w-1/2 self-center text-lg"
+          className="w-1/2 self-center text-lg"
           type="submit"
         >{`Let's Go`}</Button>
       </form>

@@ -27,12 +27,12 @@ async function AMA({
     .catch(() => undefined);
 
   // if no room redirect to ama
-  if (!room) return redirect(`/ama/?e=${AmaError.ROOM}&n=${name}`);
+  if (!room?.id) return redirect(`/ama/?e=${AmaError.ROOM}&n=${name}`);
 
   // if password is not correct redirect to ama with error and prefilled room id
   const isPasswordMatch = room.password === password;
   if (!isPasswordMatch)
-    return redirect(`/ama/?=r${roomId}&n=${name}&e=${AmaError.ROOM}`);
+    return redirect(`/ama/?r=${roomId}&n=${name}&e=${AmaError.PASSWORD}`);
 
   // check if user is host or not (to render admin panel)
   const isAdmin = room.userId === session?.user?.id;

@@ -47,7 +47,7 @@ function Navbar() {
         </li>
 
         {!isAuth ? (
-          <li className="">
+          <li>
             <Button
               className="rounded-lg p-2 font-bold"
               onClick={() => {
