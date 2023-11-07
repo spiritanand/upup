@@ -139,6 +139,15 @@ export class RedisPubSubManager {
     });
   }
 
+  async clearMessage(room: string, messageId: string) {
+    this.publish(room, {
+      type: "clear",
+      payload: {
+        message: messageId,
+      },
+    });
+  }
+
   publish(room: string, message: TMessage) {
     console.log(`publishing message to ${room}`);
     this.publisher.publish(room, JSON.stringify(message));

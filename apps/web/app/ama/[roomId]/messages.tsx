@@ -10,7 +10,7 @@ function Messages({
   webSocket: WebSocket;
   isAdmin: boolean;
 }) {
-  const handleUpvoteMessage = (messageId: string) => {
+  function handleUpvoteMessage(messageId: string) {
     if (!messageId) return;
 
     const packet: message = {
@@ -20,7 +20,17 @@ function Messages({
       },
     };
     webSocket.send(JSON.stringify(packet));
-  };
+  }
+
+  function handleClearMessage(messageId: string) {
+    const packet: message = {
+      type: "clear",
+      payload: {
+        message: messageId,
+      },
+    };
+    webSocket.send(JSON.stringify(packet));
+  }
 
   return (
     <ul className="m-4 h-[55vh] overflow-y-auto rounded-md border border-gray-400 p-2 shadow-lg md:h-[70vh] md:p-4">
@@ -50,7 +60,12 @@ function Messages({
             </button>
 
             {isAdmin ? (
-              <button type="button">
+              <button
+                onClick={() => {
+                  handleClearMessage(payload.id || "");
+                }}
+                type="button"
+              >
                 <CheckIcon
                   className="text-red-800 transition-colors hover:text-red-600"
                   height={25}

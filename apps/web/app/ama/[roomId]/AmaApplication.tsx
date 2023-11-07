@@ -77,6 +77,11 @@ function AmaApplication({
 
           return newMessages;
         });
+
+      if (data.type === "clear")
+        setMessages((prevMessages) =>
+          prevMessages.filter((m) => m.id !== data.payload.message),
+        );
     };
 
     // recreating ws connection on close

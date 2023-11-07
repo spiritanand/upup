@@ -39,26 +39,39 @@ wss.on("connection", async (ws, req) => {
 
     if (data.type === "message") {
       const roomId = users[wsId]?.room;
-
       if (!roomId) ws.close();
 
-      // publish message to redis channel
       const message = data.payload.message;
+      if (!message) return;
+
+      // publish message to redis channel
       RedisPubSubManager.getInstance().sendMessage(roomId, message);
     }
 
     if (data.type === "upvote") {
       const roomId = users[wsId]?.room;
-
       if (!roomId) ws.close();
 
-      // publish upvote to redis channel
       const messageId = data.payload.message;
+      if (!messageId) return;
+
+      // publish upvote to redis channel
       RedisPubSubManager.getInstance().upvoteMessage(
         roomId,
         wsId.toString(),
         messageId,
       );
+    }
+
+    if (data.type === "clear") {
+      const roomId = users[wsId]?.room;
+      if (!roomId) ws.close();
+
+      const messageId = data.payload.message;
+      if (!messageId) return;
+
+      // clear message from redis channel
+      RedisPubSubManager.getInstance().clearMessage(roomId, messageId);
     }
   });
 
