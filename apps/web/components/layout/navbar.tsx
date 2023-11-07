@@ -14,7 +14,10 @@ function Navbar() {
 
   return (
     <nav className="animate-fade-in-down flex h-[8vh] items-center justify-between p-4">
-      <Link className="flex h-full items-center" href="/">
+      <Link
+        className="flex h-full items-center"
+        href={isAuth ? "/dashboard" : "/"}
+      >
         <Image
           alt="upup-logo"
           className="h-full w-auto object-contain"

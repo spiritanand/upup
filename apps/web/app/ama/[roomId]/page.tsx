@@ -41,7 +41,12 @@ async function AMA({
 
   return (
     <main>
-      <AmaApplication host={room.user} room={room.room} roomId={roomId} />
+      <AmaApplication
+        host={room.user}
+        isAdmin={isAdmin}
+        room={room.room}
+        roomId={roomId}
+      />
     </main>
   );
 }

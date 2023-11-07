@@ -11,10 +11,12 @@ function AmaApplication({
   roomId,
   room,
   host,
+  isAdmin,
 }: {
   roomId: string;
   room: SelectRooms;
   host: SelectUsers;
+  isAdmin: boolean;
 }) {
   const hostedBy = host.name || host.email;
 
@@ -100,7 +102,7 @@ function AmaApplication({
         ) : null}
       </div>
 
-      <Messages messages={messages} webSocket={webSocket} />
+      <Messages isAdmin={isAdmin} messages={messages} webSocket={webSocket} />
 
       <SendMessage webSocket={webSocket} />
     </>

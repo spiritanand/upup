@@ -1,12 +1,14 @@
-import { ThickArrowUpIcon } from "@radix-ui/react-icons";
+import { CheckIcon, ThickArrowUpIcon } from "@radix-ui/react-icons";
 import type { message } from "types";
 
 function Messages({
   messages,
   webSocket,
+  isAdmin,
 }: {
   messages: message["payload"][];
   webSocket: WebSocket;
+  isAdmin: boolean;
 }) {
   const handleUpvoteMessage = (messageId: string) => {
     if (!messageId) return;
@@ -46,13 +48,16 @@ function Messages({
               />
               {payload.upvotes}
             </button>
-            {/* <button>
-              <CheckIcon
-                className="text-red-800 transition-colors hover:text-red-600"
-                height={30}
-                width={30}
-              />
-            </button> */}
+
+            {isAdmin ? (
+              <button type="button">
+                <CheckIcon
+                  className="text-red-800 transition-colors hover:text-red-600"
+                  height={25}
+                  width={25}
+                />
+              </button>
+            ) : null}
           </div>
         </div>
       ))}
