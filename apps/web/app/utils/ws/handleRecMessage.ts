@@ -7,6 +7,7 @@ const handleRecMessage = (
   ...prevMessages,
   {
     id: data.payload.id,
+    sender: data.payload.sender,
     message: data.payload.message,
     upvotes: data.payload.upvotes,
   },

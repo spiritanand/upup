@@ -16,7 +16,9 @@ async function AMA({
 }) {
   const session = await getServerSession(authOptions);
   const roomId = params.roomId;
-  const { p: password, n: name } = searchParams;
+  const { p: password, n: sender } = searchParams;
+
+  if (!sender?.trim()) return redirect(`/ama/?e=${AmaError.Name}`);
 
   // checks if room exists
   const room = await db
@@ -29,12 +31,12 @@ async function AMA({
 
   // if no room redirect to ama
   if (!room?.room || !room.user)
-    return redirect(`/ama/?e=${AmaError.ROOM}&n=${name}`);
+    return redirect(`/ama/?e=${AmaError.ROOM}&n=${sender}`);
 
   // if password is not correct redirect to ama with error and prefilled room id
   const isPasswordMatch = room.room.password === password;
   if (!isPasswordMatch)
-    return redirect(`/ama/?r=${roomId}&n=${name}&e=${AmaError.PASSWORD}`);
+    return redirect(`/ama/?r=${roomId}&n=${sender}&e=${AmaError.PASSWORD}`);
 
   // check if user is host or not (to render admin panel)
   const isAdmin = room.room.userId === session?.user?.id;
@@ -46,6 +48,7 @@ async function AMA({
         isAdmin={isAdmin}
         room={room.room}
         roomId={roomId}
+        sender={sender.trim()}
       />
     </main>
   );

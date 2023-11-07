@@ -112,11 +112,12 @@ export class RedisPubSubManager {
     });
   }
 
-  async sendMessage(room: string, message: string) {
+  async sendMessage(room: string, message: string, sender: string) {
     this.publish(room, {
       type: "message",
       payload: {
         id: uuidv4(),
+        sender,
         message,
         upvotes: 0,
       },

@@ -1,5 +1,6 @@
 import express from "express";
 import http from "http";
+import { message } from "types";
 import { v4 as uuidv4 } from "uuid";
 import { WebSocketServer } from "ws";
 import { RedisPubSubManager } from "./RedisClient";
@@ -37,22 +38,27 @@ wss.on("connection", async (ws, req) => {
       );
     }
 
+    const payload: message["payload"] = data.payload;
+
+    // handle message
     if (data.type === "message") {
       const roomId = users[wsId]?.room;
       if (!roomId) ws.close();
 
-      const message = data.payload.message;
-      if (!message) return;
+      const message = payload.message;
+      const sender = payload.sender;
+      if (!message || !sender) return;
 
       // publish message to redis channel
-      RedisPubSubManager.getInstance().sendMessage(roomId, message);
+      RedisPubSubManager.getInstance().sendMessage(roomId, message, sender);
     }
 
+    // handle upvote
     if (data.type === "upvote") {
       const roomId = users[wsId]?.room;
       if (!roomId) ws.close();
 
-      const messageId = data.payload.message;
+      const messageId = payload.message;
       if (!messageId) return;
 
       // publish upvote to redis channel
@@ -63,6 +69,7 @@ wss.on("connection", async (ws, req) => {
       );
     }
 
+    // handle clear
     if (data.type === "clear") {
       const roomId = users[wsId]?.room;
       if (!roomId) ws.close();

@@ -62,7 +62,7 @@ function Ama({
     if (searchParams.e)
       setError("root.redirect", {
         type: searchParams.e,
-        message: `You entered the wrong ${searchParams.e}`,
+        message: `You entered the wrong/invalid ${searchParams.e}`,
       });
   }, [searchParams.e, setError]);
 
@@ -82,7 +82,7 @@ function Ama({
       >
         {errors.root?.redirect?.message ? (
           <span
-            className="self-center rounded-lg bg-red-200 p-4  text-red-600"
+            className="self-center rounded-lg bg-red-200 p-4  text-sm font-semibold text-red-600"
             role="alert"
           >
             {errors.root.redirect.message}

@@ -14,11 +14,13 @@ function AmaApplication({
   room,
   host,
   isAdmin,
+  sender,
 }: {
   roomId: string;
   room: SelectRooms;
   host: SelectUsers;
   isAdmin: boolean;
+  sender: string;
 }) {
   const hostedBy = host.name || host.email;
 
@@ -82,7 +84,7 @@ function AmaApplication({
 
       <Messages isAdmin={isAdmin} messages={messages} webSocket={webSocket} />
 
-      <SendMessage webSocket={webSocket} />
+      <SendMessage sender={sender} webSocket={webSocket} />
     </>
   );
 }

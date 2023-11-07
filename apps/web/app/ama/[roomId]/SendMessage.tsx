@@ -7,7 +7,13 @@ interface MessageForm {
   message: string;
 }
 
-function SendMessage({ webSocket }: { webSocket: WebSocket }) {
+function SendMessage({
+  webSocket,
+  sender,
+}: {
+  webSocket: WebSocket;
+  sender: string;
+}) {
   const {
     register,
     handleSubmit,
@@ -21,6 +27,7 @@ function SendMessage({ webSocket }: { webSocket: WebSocket }) {
     const packet: message = {
       type: "message",
       payload: {
+        sender,
         message: message.trim(),
       },
     };

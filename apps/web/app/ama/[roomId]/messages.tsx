@@ -40,7 +40,7 @@ function Messages({
           key={payload.id}
         >
           <li className="flex items-center gap-2">
-            <span className="font-semibold">Name:</span>
+            <span className="font-semibold">{payload.sender}:</span>
             <p className="text-xl">{payload.message}</p>
           </li>
           <div className="flex gap-6">

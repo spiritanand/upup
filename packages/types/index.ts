@@ -1,6 +1,7 @@
 type messagePayload = {
   id?: string;
   message: string;
+  sender?: string;
   upvotes?: number;
 };
 
