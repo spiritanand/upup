@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import type { message } from "types";
 import { Avatar } from "ui";
 import type { SelectRooms, SelectUsers } from "../../../db/schema";
+import handleRecMessage from "../../utils/ws/handleRecMessage";
+import handleRecUpvote from "../../utils/ws/handleRecUpvote";
 import SendMessage from "./SendMessage";
 import { Messages } from "./messages";
 
@@ -44,39 +46,10 @@ function AmaApplication({
       const data = JSON.parse(event.data) as message;
 
       if (data.type === "message")
-        setMessages((prevMessages) => [
-          ...prevMessages,
-          {
-            id: data.payload.id,
-            message: data.payload.message,
-            upvotes: data.payload.upvotes,
-          },
-        ]);
+        setMessages((prev) => handleRecMessage(prev, data));
 
       if (data.type === "upvote")
-        setMessages((prevMessages) => {
-          const messageIndex = prevMessages.findIndex(
-            (message) => message.id === data.payload.message,
-          );
-
-          if (messageIndex === -1) return prevMessages;
-
-          const newMessages = [...prevMessages];
-
-          if (newMessages[messageIndex].upvotes)
-            newMessages[messageIndex].upvotes =
-              (newMessages[messageIndex].upvotes || 0) + 1;
-          else newMessages[messageIndex].upvotes = 1;
-
-          // sort messages by upvotes. Highest upvotes first
-          newMessages.sort((a, b) => {
-            if (a.upvotes && b.upvotes) return b.upvotes - a.upvotes;
-
-            return 0;
-          });
-
-          return newMessages;
-        });
+        setMessages((prev) => handleRecUpvote(prev, data));
 
       if (data.type === "clear")
         setMessages((prevMessages) =>
