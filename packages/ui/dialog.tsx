@@ -2,6 +2,7 @@
 
 import * as RadixDialog from "@radix-ui/react-dialog";
 import { Cross2Icon } from "@radix-ui/react-icons";
+import Loader from "./loader";
 
 function Dialog({
   trigger,
@@ -9,6 +10,7 @@ function Dialog({
   submitText,
   dialogDescription,
   inputFields,
+  isSubmitting,
   onSubmit,
   openModal,
   setOpenModal,
@@ -17,6 +19,7 @@ function Dialog({
   dialogTitle: string;
   dialogDescription: string;
   submitText: string;
+  isSubmitting: boolean;
   inputFields: React.ReactNode;
   onSubmit: () => Promise<void>;
   openModal: boolean;
@@ -44,10 +47,11 @@ function Dialog({
             {inputFields}
             <div className="mt-[25px] flex justify-end">
               <button
-                className="inline-flex h-[35px] items-center justify-center rounded-[4px] bg-cyan-100 px-[15px] font-medium leading-none text-cyan-500 hover:bg-cyan-200 hover:text-cyan-600 focus:shadow-[0_0_0_2px] focus:shadow-cyan-600 focus:outline-none"
+                className="inline-flex h-[35px] items-center justify-center rounded-[4px] bg-cyan-100 px-[15px] font-medium leading-none text-cyan-500 hover:bg-cyan-200 hover:text-cyan-600 focus:shadow-[0_0_0_2px] focus:shadow-cyan-600 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+                disabled={isSubmitting}
                 type="submit"
               >
-                {submitText}
+                {isSubmitting ? <Loader /> : submitText}
               </button>
             </div>
           </form>

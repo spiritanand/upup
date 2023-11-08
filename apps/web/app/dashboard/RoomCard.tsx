@@ -31,7 +31,7 @@ function RoomCard({ room }: { room: SelectRooms }) {
             onClick={() => {
               void navigator.clipboard.writeText(`
             Meeting Details
-            Join @ https://upup.vercel.app/ama?r=${room.id}
+            Join @ https://upup-spirits-projects.vercel.app//ama?r=${room.id}
             Password:- ${room.password}
             `);
 

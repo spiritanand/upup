@@ -18,7 +18,7 @@ function CreateRoom() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     resetField,
   } = useForm<TcreateRoom>();
 
@@ -71,6 +71,7 @@ function CreateRoom() {
           }}
         />
       }
+      isSubmitting={isSubmitting}
       onSubmit={handleSubmit(onSubmit)}
       openModal={openModal}
       setOpenModal={setOpenModal}
