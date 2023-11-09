@@ -18,7 +18,7 @@ const users: {
   };
 } = {};
 
-wss.on("connection", async (ws, req) => {
+wss.on("connection", async (ws) => {
   const wsId = uuidv4();
 
   ws.on("message", (message: string) => {
