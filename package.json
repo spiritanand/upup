@@ -5,7 +5,8 @@
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "start:ws": "cd apps/server && node dist/index.js"
+    "start:ws": "cd apps/server && node dist/index.js",
+    "build:ws": "cd apps/server && npx tsc"
   },
   "devDependencies": {
     "eslint": "^8.48.0",
