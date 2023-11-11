@@ -4,6 +4,7 @@ import Link from "next/link";
 const hero = () => {
   return (
     <main className="animate-fade-in-up">
+      <title>Easy AMA for your audience</title>
       <div className="flex flex-col flex-wrap items-center justify-center gap-10 p-8 md:flex-row lg:gap-24">
         <div className="flex flex-col gap-4">
           <h1 className="flex flex-col gap-2 text-4xl font-extrabold md:text-8xl">
