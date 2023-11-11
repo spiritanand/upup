@@ -1,3 +1,4 @@
+import { Analytics } from "@vercel/analytics/react";
 import type { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { Inter } from "next/font/google";
@@ -31,6 +32,8 @@ export default async function RootLayout({
           <Navbar />
 
           {children}
+
+          <Analytics />
         </Providers>
       </body>
     </html>
