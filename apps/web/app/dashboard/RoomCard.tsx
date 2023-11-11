@@ -30,9 +30,7 @@ function RoomCard({ room }: { room: SelectRooms }) {
             className="text-cyan-500 transition-colors hover:text-cyan-600"
             onClick={() => {
               void navigator.clipboard.writeText(`
-            Meeting Details
-            Join @ https://upup-spirits-projects.vercel.app//ama?r=${room.id}
-            Password:- ${room.password}
+            Meeting Details\nJoin @ https://upupapp.xyz//ama?r=${room.id}\nPassword:- ${room.password}
             `);
 
               toast.success("Copied to clipboard");
