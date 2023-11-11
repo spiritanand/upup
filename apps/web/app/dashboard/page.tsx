@@ -1,4 +1,5 @@
 import { eq } from "drizzle-orm";
+import type { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import db from "../../db";
@@ -7,6 +8,11 @@ import { authOptions } from "../api/auth/[...nextauth]/route";
 import CreateRoom from "./CreateRoom";
 import RoomCard from "./RoomCard";
 import Welcome from "./Welcome";
+
+export const metadata: Metadata = {
+  title: "Dashboard",
+  description: "Manage your rooms",
+};
 
 async function Dashboard() {
   const session = await getServerSession(authOptions);
