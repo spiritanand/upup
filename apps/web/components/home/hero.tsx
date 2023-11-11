@@ -52,7 +52,7 @@ const hero = () => {
         </div>
         <Image
           alt="demo of upup"
-          className="h-auto w-[70%] md:w-[40%] lg:w-[25%]"
+          className="h-auto w-[70%] shadow-2xl md:w-[40%] lg:w-[25%]"
           height={0}
           priority
           sizes="50vw"

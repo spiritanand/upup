@@ -16,7 +16,8 @@ const handleRecUpvote = (prevMessages: message["payload"][], data: message) => {
 
   // sort messages by upvotes. Highest upvotes first
   newMessages.sort((a, b) => {
-    if (a.upvotes && b.upvotes) return b.upvotes - a.upvotes;
+    if (typeof a.upvotes === "number" && typeof b.upvotes === "number")
+      return b.upvotes - a.upvotes;
 
     return 0;
   });
