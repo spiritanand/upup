@@ -14,8 +14,16 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "upup",
-  description: "AMA app with upvotes",
+  title: "upup - AMA app with upvotes",
+  description:
+    "upup is an AMA app with upvotes, but for live streamers of any kind. it allows you to answer the top upvoted questions from your audience.",
+  openGraph: {
+    title: "upup - AMA app with upvotes",
+    description:
+      "upup is an AMA app with upvotes for live streamers of any kind. it allows you to answer the top upvoted questions from your audience.",
+    images: ["../public/og.png"],
+    url: "https://upupapp.xyz",
+  },
 };
 
 export default async function RootLayout({
