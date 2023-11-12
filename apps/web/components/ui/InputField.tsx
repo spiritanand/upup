@@ -12,7 +12,7 @@ function InputField<T extends string>({
   error: string | undefined;
 }) {
   return (
-    <div className="flex items-center gap-4">
+    <div className="flex flex-wrap items-center gap-4">
       <label className="min-w-[85px] font-bold" htmlFor={label}>
         {label}
       </label>

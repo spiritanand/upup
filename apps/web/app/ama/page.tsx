@@ -53,7 +53,8 @@ function Ama({
       toast.success("Joined Room 🤩");
     } catch (e) {
       if (e instanceof AxiosError) {
-        toast.error(e.message || "An error occurred");
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access -- e.response is defined since e is an AxiosError
+        toast.error(e.response?.data.message || "An error occurred");
       } else {
         toast.error("An error occurred");
       }
