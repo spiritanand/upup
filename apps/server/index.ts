@@ -10,7 +10,18 @@ const port = 8080;
 
 const server = http.createServer(app);
 
-const wss = new WebSocketServer({ server });
+const wss = new WebSocketServer({
+  server,
+  verifyClient: (info, done) => {
+    if (
+      info.origin === "http://localhost:3000" ||
+      (info.origin === "https://upupapp.xyz" && info.secure)
+    )
+      return done(true);
+
+    return done(false, 401, "Unauthorized Origin");
+  },
+});
 
 const users: {
   [key: string]: {

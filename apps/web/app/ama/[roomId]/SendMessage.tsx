@@ -65,7 +65,7 @@ function SendMessage({
 
       <Button
         className="text-sm shadow-2xl"
-        disabled={Boolean(!webSocket.OPEN)}
+        disabled={Boolean(errors.message)}
         type="submit"
       >
         Post Question
