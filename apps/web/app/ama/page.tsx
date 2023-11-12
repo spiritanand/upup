@@ -1,5 +1,7 @@
 "use client";
 
+// join room (enter room details)
+
 import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -73,7 +75,7 @@ function Ama({
       </h1>
 
       <form
-        className="m-auto flex flex-col gap-10 p-5 sm:p-0 md:max-w-md"
+        className="container m-auto flex flex-col gap-10 p-5 sm:p-0 md:max-w-md"
         onSubmit={(e) => {
           e.preventDefault();
 
