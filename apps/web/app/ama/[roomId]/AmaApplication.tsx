@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import type { message } from "types";
 import { Avatar } from "ui";
 import type { SelectRooms, SelectUsers } from "../../../db/schema";
-import handleRecMessage from "../../utils/ws/handleRecMessage";
-import handleRecUpvote from "../../utils/ws/handleRecUpvote";
+import handleRecMessage from "../../../utils/ws/handleRecMessage";
+import handleRecUpvote from "../../../utils/ws/handleRecUpvote";
 import SendMessage from "./SendMessage";
 import { Messages } from "./messages";
 

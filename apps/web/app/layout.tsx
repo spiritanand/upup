@@ -22,6 +22,7 @@ export const metadata: Metadata = {
     description:
       "upup is an AMA app with upvotes for live streamers of any kind. it allows you to answer the top upvoted questions from your audience.",
     url: "https://upupapp.xyz",
+    images: ["https://i.postimg.cc/YC2fWZJX/opengraph-image.png"],
   },
 };
 
